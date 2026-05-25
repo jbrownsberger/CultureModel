@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+:root {
+  --bg:#ede4cc;--bg2:#e4d8b8;--bg3:#d8c8a0;
+  --panel:#faf4e2;--panel2:#f2e8d0;--panel3:#e8dcc0;
+  --border:#c0a870;--border2:#9a8050;--border3:#7a6038;
+  --shadow:rgba(80,56,16,0.16);
+  --ink:#221808;--ink2:#3c2c14;--ink3:#5c4824;--ink4:#8a7048;--ink5:#b09870;
+  --gold:#8a6010;--gold2:#c8980c;--gold3:#e8c840;
+  --red:#7a1808;--red2:#b83020;--red3:#e04828;
+  --green:#1a4808;--green2:#3a7818;--green3:#5aaa30;
+  --blue:#102848;--blue2:#285898;--blue3:#4880cc;
+  --amber:#7a3808;--amber2:#c06010;--amber3:#e89030;
+  --purple:#3a1858;--purple2:#6a3898;--purple3:#9a68c8;
+  --teal:#0a4040;--teal2:#1a7070;--teal3:#30a898;
+}
