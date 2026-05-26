@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { createModel, stepModel } from '../lib/simulation';
+import { createModel, stepModel } from './simulation';
 
 const DEFAULT_VALUES = {
   community: [0.5, 0.2],
@@ -37,7 +37,6 @@ export function useSimulation() {
       ),
     });
     modelRef.current = m;
-    // Deep-clone for React state (so renders trigger)
     setModel(cloneModel(m));
     setCurrentStep(0);
   }, [params, institutions, valueSettings]);
@@ -116,7 +115,6 @@ export function useSimulation() {
   };
 }
 
-// Shallow clone for React — preserves Sets but triggers re-render
 function cloneModel(m) {
   return {
     ...m,
@@ -130,6 +128,6 @@ function cloneModel(m) {
       Object.entries(m.institutions).map(([k, v]) => [k, { ...v, members: new Set(v.members) }])
     ),
     history: { ...m.history },
-    adjacency: m.adjacency,   // keep reference (too large to copy every frame)
+    adjacency: m.adjacency,
   };
 }
