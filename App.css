@@ -1,0 +1,87 @@
+/* App-level layout */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Crimson Text', serif;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 14px;
+  background: var(--panel);
+  border-bottom: 2px solid var(--border);
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px var(--shadow);
+  z-index: 10;
+  flex-wrap: wrap;
+}
+
+.app-header__left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-header__logo {
+  font-size: 20px;
+  color: var(--gold);
+}
+
+.app-header__title {
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  color: var(--gold);
+  letter-spacing: 3px;
+  white-space: nowrap;
+}
+
+.app-header__tabs {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.tab-btn {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  color: var(--ink3);
+  padding: 3px 14px;
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1px;
+  border-radius: 3px;
+  transition: all .1s;
+}
+
+.tab-btn:hover { border-color: var(--gold); color: var(--gold); }
+.tab-btn.active { border-color: var(--gold2); color: var(--gold); background: #fef8e0; }
+.tab-btn:disabled { opacity: .45; cursor: not-allowed; }
+
+.app-header__right {
+  font-family: 'Cinzel', serif;
+  font-size: 9.5px;
+  color: var(--ink4);
+  letter-spacing: .5px;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg2);
+  position: relative;
+}

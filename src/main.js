@@ -1,4 +1,6 @@
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from '../App.jsx';
 import './style.css';
 
-// The Valley — full simulation entry point
-console.log('The Valley loading...');
+createRoot(document.getElementById('app')).render(React.createElement(App));
