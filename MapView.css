@@ -1,0 +1,16 @@
+.map-wrap{flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.map-legend{display:flex;gap:10px;flex-wrap:wrap;padding:5px 12px;background:var(--panel);border-bottom:1px solid var(--border);font-size:11px}
+.legend-item{display:flex;align-items:center;gap:4px;color:var(--ink4)}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.map-svg{flex:1;display:block;cursor:crosshair}
+.map-empty{flex:1;display:flex;align-items:center;justify-content:center;background:var(--bg2)}
+.map-empty__inner{text-align:center;color:var(--ink5)}
+.map-empty__icon{font-size:48px;display:block;margin-bottom:10px;opacity:.4}
+.map-empty__title{font-family:'Cinzel',serif;font-size:14px;color:var(--ink4);margin-bottom:4px}
+.map-empty__sub{font-size:12px}
+.map-tooltip{position:absolute;top:12px;right:12px;background:var(--panel);border:1px solid var(--border2);border-radius:4px;padding:8px 12px;min-width:160px;box-shadow:0 4px 16px var(--shadow);pointer-events:none}
+.tooltip-header{display:flex;align-items:center;gap:6px;font-weight:600;font-size:13px;margin-bottom:6px}
+.tooltip-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.tooltip-body{font-size:12px}
+.tooltip-row{display:flex;justify-content:space-between;gap:12px;padding:1px 0}
+.tooltip-row.muted{color:var(--ink5)}.tooltip-val{font-weight:600;color:var(--ink)}

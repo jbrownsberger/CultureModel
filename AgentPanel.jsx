@@ -1,12 +1,12 @@
 import React from 'react';
-import { getDominantPractice, getFreeTime, PRACTICE_COLORS, PRACTICE_LABELS, INSTITUTION_ICONS } from '../lib/simulation';
+import { getDominantPractice, getFreeTime, PRACTICE_COLORS, PRACTICE_LABELS, INSTITUTION_ICONS } from './simulation';
 import './AgentPanel.css';
 
 export default function AgentPanel({ agent, model, onClose }) {
   const { institutions, adjacency } = model;
-  const dom     = getDominantPractice(agent, institutions);
-  const color   = PRACTICE_COLORS[dom] || '#999';
-  const nbrs    = [...(adjacency.get(agent.id) || [])];
+  const dom      = getDominantPractice(agent, institutions);
+  const color    = PRACTICE_COLORS[dom] || '#999';
+  const nbrs     = [...(adjacency.get(agent.id) || [])];
   const freeTime = getFreeTime(agent);
 
   const alloc = Object.entries(agent.timeAllocation)
@@ -14,11 +14,8 @@ export default function AgentPanel({ agent, model, onClose }) {
     .filter(x => x.hrs >= 0.5)
     .sort((a, b) => b.hrs - a.hrs);
 
-  const totalAllocated = alloc.reduce((s, x) => s + x.hrs, 0);
-  const totalHrs       = agent.timeBudget;
-
-  const topValues = Object.entries(agent.values)
-    .sort((a, b) => b[1] - a[1]);
+  const totalHrs = agent.timeBudget;
+  const topValues = Object.entries(agent.values).sort((a, b) => b[1] - a[1]);
 
   return (
     <div className="agent-panel">
@@ -26,16 +23,12 @@ export default function AgentPanel({ agent, model, onClose }) {
         <div className="agent-panel__title">
           <span className="agent-panel__dot" style={{ background: color }} />
           <span>Agent <strong>{agent.id}</strong></span>
-          <span className="agent-panel__practice" style={{ color }}>
-            {PRACTICE_LABELS[dom] || dom}
-          </span>
+          <span className="agent-panel__practice" style={{ color }}>{PRACTICE_LABELS[dom] || dom}</span>
         </div>
         <button className="agent-panel__close" onClick={onClose}>✕</button>
       </div>
 
       <div className="agent-panel__body">
-
-        {/* Time allocation donut */}
         <section className="panel-section">
           <h3 className="panel-section__title">Time Allocation</h3>
           <DonutChart alloc={alloc} freeTime={freeTime} total={totalHrs} institutions={institutions} />
@@ -67,7 +60,6 @@ export default function AgentPanel({ agent, model, onClose }) {
           </div>
         </section>
 
-        {/* Values radar */}
         <section className="panel-section">
           <h3 className="panel-section__title">Values</h3>
           <div className="values-grid">
@@ -75,8 +67,7 @@ export default function AgentPanel({ agent, model, onClose }) {
               <div key={k} className="value-bar-row">
                 <span className="value-bar-label">{k}</span>
                 <div className="value-bar-track">
-                  <div className="value-bar-fill"
-                    style={{ width: `${v * 100}%`, background: v > 0.7 ? color : '#999' }} />
+                  <div className="value-bar-fill" style={{ width: `${v*100}%`, background: v > 0.7 ? color : '#999' }} />
                 </div>
                 <span className="value-bar-num">{v.toFixed(2)}</span>
               </div>
@@ -84,35 +75,25 @@ export default function AgentPanel({ agent, model, onClose }) {
           </div>
         </section>
 
-        {/* Network neighbours */}
         <section className="panel-section">
-          <h3 className="panel-section__title">
-            Connections <span className="count-badge">{nbrs.length}</span>
-          </h3>
+          <h3 className="panel-section__title">Connections <span className="count-badge">{nbrs.length}</span></h3>
           <div className="nbr-grid">
             {nbrs.slice(0, 20).map(nbrId => {
               const nbr  = model.agents[nbrId];
               const ndom = getDominantPractice(nbr, institutions);
               return (
-                <div key={nbrId} className="nbr-chip"
-                  style={{ borderColor: PRACTICE_COLORS[ndom] || '#ccc' }}>
-                  <span className="nbr-dot"
-                    style={{ background: PRACTICE_COLORS[ndom] || '#999' }} />
+                <div key={nbrId} className="nbr-chip" style={{ borderColor: PRACTICE_COLORS[ndom] || '#ccc' }}>
+                  <span className="nbr-dot" style={{ background: PRACTICE_COLORS[ndom] || '#999' }} />
                   {nbrId}
                 </div>
               );
             })}
-            {nbrs.length > 20 && (
-              <span className="nbr-more">+{nbrs.length - 20} more</span>
-            )}
+            {nbrs.length > 20 && <span className="nbr-more">+{nbrs.length - 20} more</span>}
           </div>
         </section>
 
-        {/* Aware of */}
         <section className="panel-section">
-          <h3 className="panel-section__title">
-            Aware of <span className="count-badge">{agent.awareOf.size}</span>
-          </h3>
+          <h3 className="panel-section__title">Aware of <span className="count-badge">{agent.awareOf.size}</span></h3>
           <div className="aware-list">
             {[...agent.awareOf].map(name => {
               const inst = institutions[name];
@@ -133,47 +114,29 @@ export default function AgentPanel({ agent, model, onClose }) {
 }
 
 function DonutChart({ alloc, freeTime, total, institutions }) {
-  const size   = 100;
-  const cx     = size / 2;
-  const cy     = size / 2;
-  const r      = 36;
-  const stroke = 14;
-
+  const size = 100; const cx = 50; const cy = 50; const r = 36; const stroke = 14;
   const segments = [
-    ...alloc.map(({ name, hrs, inst }) => ({
-      hrs,
-      color: PRACTICE_COLORS[inst?.practiceType] || '#999',
-    })),
+    ...alloc.map(({ name, hrs, inst }) => ({ hrs, color: PRACTICE_COLORS[inst?.practiceType] || '#999' })),
     ...(freeTime >= 0.5 ? [{ hrs: freeTime, color: '#e5e7eb' }] : []),
   ];
-
-  let cumAngle = -90; // start at top
+  let cumAngle = -90;
   const paths = segments.map(({ hrs, color }) => {
-    const pct       = hrs / total;
-    const angle     = pct * 360;
-    const startRad  = (cumAngle * Math.PI) / 180;
-    const endRad    = ((cumAngle + angle) * Math.PI) / 180;
-    const x1 = cx + r * Math.cos(startRad);
-    const y1 = cy + r * Math.sin(startRad);
-    const x2 = cx + r * Math.cos(endRad);
-    const y2 = cy + r * Math.sin(endRad);
-    const large = angle > 180 ? 1 : 0;
-    const d  = `M ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2}`;
+    const angle = (hrs / total) * 360;
+    const startRad = (cumAngle * Math.PI) / 180;
+    const endRad   = ((cumAngle + angle) * Math.PI) / 180;
+    const x1 = cx + r * Math.cos(startRad); const y1 = cy + r * Math.sin(startRad);
+    const x2 = cx + r * Math.cos(endRad);   const y2 = cy + r * Math.sin(endRad);
+    const d = `M ${x1} ${y1} A ${r} ${r} 0 ${angle > 180 ? 1 : 0} 1 ${x2} ${y2}`;
     cumAngle += angle;
     return { d, color, strokeWidth: stroke };
   });
-
   return (
     <svg width={size} height={size} className="donut-chart">
       <circle cx={cx} cy={cy} r={r} fill="none" stroke="#eee" strokeWidth={stroke} />
       {paths.map((p, i) => (
-        <path key={i} d={p.d} fill="none" stroke={p.color}
-          strokeWidth={p.strokeWidth} strokeLinecap="butt" />
+        <path key={i} d={p.d} fill="none" stroke={p.color} strokeWidth={p.strokeWidth} strokeLinecap="butt" />
       ))}
-      <text x={cx} y={cy+4} textAnchor="middle"
-        fontSize={11} fontFamily="var(--font-mono)" fill="var(--ink-soft)">
-        168h
-      </text>
+      <text x={cx} y={cy+4} textAnchor="middle" fontSize={11} fill="#999">168h</text>
     </svg>
   );
 }

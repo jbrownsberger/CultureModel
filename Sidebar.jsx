@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { INSTITUTION_ICONS, PRACTICE_COLORS } from '../lib/simulation';
+import { INSTITUTION_ICONS, PRACTICE_COLORS } from './simulation';
 import './Sidebar.css';
 
 const PRESETS = {
@@ -29,7 +29,7 @@ const QUICK_INSTS = [
 ];
 
 export default function Sidebar({ sim, activeTab }) {
-  const [section, setSection] = useState('institutions'); // 'institutions'|'population'|'params'
+  const [section, setSection] = useState('institutions');
   const [customForm, setCustomForm] = useState({
     name: '', type: 'club', size: 25, money_cost: 0, money_income: 0,
     culture: { community: 0, tradition: 0, growth: 0, civic: 0, status: 0 },
@@ -38,25 +38,19 @@ export default function Sidebar({ sim, activeTab }) {
 
   const addQuick = (template) => {
     const n = sim.institutions.filter(i => i.type === template.type).length + 1;
-    sim.addInstitution({
-      ...template,
-      name: `${template.type.replace('_',' ')} ${n}`,
-    });
+    sim.addInstitution({ ...template, name: `${template.type.replace('_',' ')} ${n}` });
   };
 
   const addCustom = () => {
     if (!customForm.name.trim()) return;
     sim.addInstitution({ ...customForm });
-    setCustomForm({
-      name: '', type: 'club', size: 25, money_cost: 0, money_income: 0,
-      culture: { community: 0, tradition: 0, growth: 0, civic: 0, status: 0 },
-    });
+    setCustomForm({ name: '', type: 'club', size: 25, money_cost: 0, money_income: 0,
+      culture: { community: 0, tradition: 0, growth: 0, civic: 0, status: 0 } });
     setShowCustom(false);
   };
 
   return (
     <aside className="sidebar">
-      {/* Section switcher */}
       <div className="sidebar-tabs">
         {[['institutions','Institutions'],['population','Population'],['params','Params']].map(([k,l]) => (
           <button key={k} className={`sidebar-tab ${section===k?'active':''}`}
@@ -65,14 +59,9 @@ export default function Sidebar({ sim, activeTab }) {
       </div>
 
       <div className="sidebar-content">
-
-        {/* ── INSTITUTIONS ─────────────────────────────────────────── */}
         {section === 'institutions' && (
           <>
-            <p className="sidebar-hint">
-              Quick-add common types, or define a custom institution below.
-            </p>
-
+            <p className="sidebar-hint">Quick-add common types, or define a custom institution below.</p>
             <div className="quick-grid">
               {QUICK_INSTS.map(qi => (
                 <button key={qi.type} className="quick-btn"
@@ -83,12 +72,9 @@ export default function Sidebar({ sim, activeTab }) {
                 </button>
               ))}
             </div>
-
-            <button className="toggle-custom-btn"
-              onClick={() => setShowCustom(v => !v)}>
+            <button className="toggle-custom-btn" onClick={() => setShowCustom(v => !v)}>
               {showCustom ? '▲ Hide custom' : '▼ Custom institution…'}
             </button>
-
             {showCustom && (
               <div className="custom-form">
                 <label className="field-label">Name
@@ -96,7 +82,6 @@ export default function Sidebar({ sim, activeTab }) {
                     onChange={e => setCustomForm(f => ({...f, name: e.target.value}))}
                     placeholder="e.g. First Baptist" />
                 </label>
-
                 <label className="field-label">Type
                   <select className="field-select" value={customForm.type}
                     onChange={e => setCustomForm(f => ({...f, type: e.target.value}))}>
@@ -105,7 +90,6 @@ export default function Sidebar({ sim, activeTab }) {
                     ))}
                   </select>
                 </label>
-
                 <div className="field-row">
                   <label className="field-label half">Max members
                     <input className="field-input" type="number" min="5" max="100"
@@ -118,13 +102,11 @@ export default function Sidebar({ sim, activeTab }) {
                       onChange={e => setCustomForm(f => ({...f, money_cost: +e.target.value}))} />
                   </label>
                 </div>
-
                 <label className="field-label">Income $/hr
                   <input className="field-input" type="number" min="0" step="1"
                     value={customForm.money_income}
                     onChange={e => setCustomForm(f => ({...f, money_income: +e.target.value}))} />
                 </label>
-
                 <p className="field-label" style={{marginBottom:4}}>Culture values</p>
                 {Object.keys(customForm.culture).map(v => (
                   <label key={v} className="mini-slider">
@@ -136,15 +118,9 @@ export default function Sidebar({ sim, activeTab }) {
                     <span className="mini-val">{customForm.culture[v].toFixed(1)}</span>
                   </label>
                 ))}
-
-                <button className="add-btn" onClick={addCustom}
-                  disabled={!customForm.name.trim()}>
-                  ➕ Add
-                </button>
+                <button className="add-btn" onClick={addCustom} disabled={!customForm.name.trim()}>➕ Add</button>
               </div>
             )}
-
-            {/* Institution list */}
             <div className="inst-list">
               {sim.institutions.length === 0 && (
                 <p className="sidebar-hint muted">No institutions yet.</p>
@@ -155,8 +131,7 @@ export default function Sidebar({ sim, activeTab }) {
                   <span className="inst-icon">{INSTITUTION_ICONS[inst.type] || '🏛'}</span>
                   <div className="inst-info">
                     <span className="inst-name">{inst.name}</span>
-                    <span className="inst-meta">
-                      {inst.size} cap · ${inst.money_cost}/h
+                    <span className="inst-meta">{inst.size} cap · ${inst.money_cost}/h
                       {inst.money_income > 0 && ` · $${inst.money_income}/h`}
                     </span>
                   </div>
@@ -167,22 +142,17 @@ export default function Sidebar({ sim, activeTab }) {
           </>
         )}
 
-        {/* ── POPULATION ───────────────────────────────────────────── */}
         {section === 'population' && (
           <>
             <p className="sidebar-hint">Set mean and spread for each value.</p>
-
             <div className="preset-row">
               {Object.keys(PRESETS).map(name => (
                 <button key={name} className="preset-btn"
                   onClick={() => sim.applyPreset(
                     Object.fromEntries(Object.entries(PRESETS[name]).map(([k,v]) => [k,v]))
-                  )}>
-                  {name}
-                </button>
+                  )}>{name}</button>
               ))}
             </div>
-
             {Object.entries(sim.valueSettings).map(([vname, [mean, std]]) => (
               <div key={vname} className="value-row">
                 <span className="value-name">{vname}</span>
@@ -190,17 +160,13 @@ export default function Sidebar({ sim, activeTab }) {
                   <label className="mini-slider">
                     <span className="mini-label">μ</span>
                     <input type="range" min="0" max="1" step="0.05" value={mean}
-                      onChange={e => sim.setValueSettings(prev => ({
-                        ...prev, [vname]: [+e.target.value, std]
-                      }))} />
+                      onChange={e => sim.setValueSettings(prev => ({...prev, [vname]: [+e.target.value, std]}))} />
                     <span className="mini-val">{mean.toFixed(2)}</span>
                   </label>
                   <label className="mini-slider">
                     <span className="mini-label">σ</span>
                     <input type="range" min="0" max="0.4" step="0.02" value={std}
-                      onChange={e => sim.setValueSettings(prev => ({
-                        ...prev, [vname]: [mean, +e.target.value]
-                      }))} />
+                      onChange={e => sim.setValueSettings(prev => ({...prev, [vname]: [mean, +e.target.value]}))} />
                     <span className="mini-val">{std.toFixed(2)}</span>
                   </label>
                 </div>
@@ -209,24 +175,20 @@ export default function Sidebar({ sim, activeTab }) {
           </>
         )}
 
-        {/* ── PARAMS ───────────────────────────────────────────────── */}
         {section === 'params' && (
           <>
             {[
-              ['nAgents',         'Agents',             30,  200,  10,   'integer'],
-              ['networkDensity',   'Background density', 0.01,0.10, 0.005,'float'],
-              ['awarenessRadius',  'Awareness radius',   0.1, 0.6,  0.02, 'float'],
-              ['reallocFreq',      'Reoptimise every N steps', 1, 10, 1, 'integer'],
-              ['seed',             'Random seed',        0,   9999, 1,   'integer'],
+              ['nAgents','Agents',30,200,10,'integer'],
+              ['networkDensity','Background density',0.01,0.10,0.005,'float'],
+              ['awarenessRadius','Awareness radius',0.1,0.6,0.02,'float'],
+              ['reallocFreq','Reoptimise every N steps',1,10,1,'integer'],
+              ['seed','Random seed',0,9999,1,'integer'],
             ].map(([key, label, min, max, step, type]) => (
-              <label key={key} className="field-label">
-                {label}
+              <label key={key} className="field-label">{label}
                 <div className="param-row">
                   <input type="range" min={min} max={max} step={step}
                     value={sim.params[key]}
-                    onChange={e => sim.setParams(p => ({
-                      ...p, [key]: type==='integer' ? +e.target.value : +e.target.value
-                    }))} />
+                    onChange={e => sim.setParams(p => ({...p, [key]: +e.target.value}))} />
                   <span className="param-val">
                     {type === 'float' ? sim.params[key].toFixed(3) : sim.params[key]}
                   </span>
