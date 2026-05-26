@@ -1,13 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Valley</title>
-  <link rel="stylesheet" href="./src/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
-  <div id="app"></div>
-  <script type="module" src="./src/main.js"></script>
+  <div id="hdr">
+    <h1>THE VALLEY</h1>
+    <div class="rbar">
+      <div class="res" id="hr-coin"><span>⚙</span><b>0</b></div>
+      <div class="res" id="hr-bread"><span>🍞</span><b>0</b></div>
+      <div class="res" id="hr-wood"><span>🪵</span><b>0</b></div>
+      <div class="res" id="hr-stone"><span>🪨</span><b>0</b></div>
+      <div class="res" id="hr-pop"><span>👥</span><b>0</b></div>
+      <div class="res" id="hr-lead"><span>★</span><b>0</b></div>
+    </div>
+    <div id="tctrl">
+      <span class="snlbl" id="slbl">SPRING</span>
+      <span id="dlbl">Day 1, Yr 1</span>
+      <button class="btn on" id="bp" onclick="setSpd(0)">⏸</button>
+      <button class="btn" id="b1" onclick="setSpd(1)">▶</button>
+      <button class="btn" id="b3" onclick="setSpd(3)">▶▶</button>
+    </div>
+  </div>
+  <div id="main">
+    <div id="cw">
+      <canvas id="bgc"></canvas>
+      <canvas id="mc"></canvas>
+      <div id="bmbar">CLICK MAP TO PLACE — ESC TO CANCEL</div>
+      <div id="tt"></div>
+    </div>
+    <div id="sb">
+      <div id="stabs">
+        <div class="stab on" onclick="setTab('sel')">SELECTED</div>
+        <div class="stab" onclick="setTab('you')">YOU</div>
+        <div class="stab" onclick="setTab('bld')">BUILD</div>
+        <div class="stab" onclick="setTab('eco')">ECONOMY</div>
+        <div class="stab" onclick="setTab('log')">LOG</div>
+      </div>
+      <div id="sbody">
+        <div id="t-sel"><p style="color:var(--ink5);text-align:center;padding:18px 0;font-size:13px">Click a building or villager.</p></div>
+        <div id="t-you" style="display:none"></div>
+        <div id="t-bld" style="display:none"></div>
+        <div id="t-eco" style="display:none"></div>
+        <div id="t-log" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
 </body>
 </html>
